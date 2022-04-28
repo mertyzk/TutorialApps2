@@ -1,1 +1,1 @@
-<img src="https://raw.githubusercontent.com/mertyzk/TutorialApps2/main/ShareTextWithOtherApps/applicationDesign.png" height="642" width="1389"></img>
+<img src="https://raw.githubusercontent.com/mertyzk/TutorialApps2/main/ShareTextWithOtherApps/applicationDesign.png" height="1389" width="642"></img>
