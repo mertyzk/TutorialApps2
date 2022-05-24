@@ -39,8 +39,9 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         super.viewDidLoad()
 
         navigationItem.rightBarButtonItem?.tintColor = UIColor.white
-        navigationController?.navigationBar.backgroundColor = UIColor.systemOrange
+        navigationController?.navigationBar.backgroundColor = UIColor.systemPink
         navigationController?.navigationBar.tintColor = UIColor.white
+        navigationController?.navigationBar.titleTextAttributes = [ NSAttributedString.Key.foregroundColor : UIColor.white ]
         
         fetchResultController = getFetchResultController()
         fetchResultController.delegate = self
@@ -73,6 +74,36 @@ class TableViewController: UITableViewController, NSFetchedResultsControllerDele
         cell.descriptionLabel.text = dataRow.descriptiontext
         cell.imagePhoto.image = UIImage(data: dataRow.image!)
         return cell
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.reloadData()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "edit" {
+            let selectedCell = sender as! UITableViewCell
+            let indexPath = tableView.indexPath(for: selectedCell)
+            
+            let addPhotoVC : addAPhotoViewController = segue.destination as! addAPhotoViewController
+            let selectedItem : Entity = fetchResultController.object(at: indexPath!) as! Entity
+            addPhotoVC.selectedItem = selectedItem
+            
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        let managedObject : NSManagedObject = fetchResultController.object(at: indexPath) as! NSManagedObject
+        persistentContainer.delete(managedObject)
+        
+        do {
+            try persistentContainer.save()
+        } catch {
+            print(error)
+            return
+        }
+        
     }
 
 }
